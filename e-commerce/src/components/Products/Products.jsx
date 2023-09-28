@@ -1,40 +1,33 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect, useContext} from 'react';
 
 import './Products.css';
 import fetchProducts from '../../api/fetchProducts';
 import ProductCard from '../ProductCard/ProductCard';
 
+import Loading from '../Loading/Loading';
+import AppContext from '../../context/AppContext';
 
 function Products() {
-
   // array de produtos
-const [products, setProducts] = useState([]);
+// const [products, setProducts] = useState([]);
+const {products, setProducts, loading, setLoading} = useContext(AppContext);
 
 useEffect(() => {
   // função pra buscar os produtos
-  fetchProducts('iphone').then((response) => {
+  fetchProducts({products}).then((response) => {
     setProducts(response);
+    setLoading(false)
     // console.log(products)
   }) ;
 }, []);
 
-// function Products() {
   return ( 
+    (loading && <Loading />) || (
     <section className="products container">
-
     {products.map((product) => <ProductCard key={product.id} data={product} />)}
-    
-    
-    {/* <ProductCard data={{ title: 'teste produto'}} /> */}
-
-    {/* aqui lista os produtos na tela de forma simples trazendo somente o título do produto */}
-
-    {/* {
-        products.map((product) => <p key={product.title}>{product.title}</p>)
-    } */}
-
     </section>
-
+    )
+        
    );
 }
 

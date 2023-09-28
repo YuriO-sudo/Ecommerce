@@ -1,18 +1,31 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import  { BsSearch } from 'react-icons/bs';
 import './SearchBar.css';
 
-
+import fetchProducts from '../../api/fetchProducts';
+import AppContext from '../../context/AppContext';
 
 // componente chamado SearchBar que tá sendo importado lá no Header
 function SearchBar() {
 
+    // searchValue > armazena o valor do estado
+  // setSearchValue > função que vai atualizar o valor do estado
+  const {setProducts, setLoading} = useContext(AppContext);
+  
   const [searchValue ,setSearchValue] = useState('');
-  // searchValue > armazena o valor do estado
-// setSearchValue > função que vai atualizar o valor do estado
+
+  const handleSearch = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    const products = await fetchProducts(searchValue);
+    setProducts(products);
+    setLoading(false);
+    setSearchValue('');
+  }
 
   return ( 
-    <form className="search-bar">
+    <form className="search-bar" onSubmit={handleSearch}>
+    {/* {name} */}
     <input
     type="search"
     value={searchValue}

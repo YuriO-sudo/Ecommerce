@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import propTypes from 'prop-types';
 import { BsFillCartPlusFill } from 'react-icons/bs';
 
 import './ProductCard.css';
 import formatCurrency from '../../utils/formatCurrency';
+import AppContext from '../../context/AppContext';
 
 
 // esse data que tá aqui como parâmetro,  são algumas propriedades 
 function ProductCard({ data }) {
-  const { title, thumbnail, price } = data; 
+  const { title, thumbnail, price } = data; //array com todas as info do produto
 
+  const { cartItems,  setCartItems } = useContext(AppContext);
+
+  const handleAddCart = () =>  setCartItems([...cartItems, data]);
+    
   return ( 
     <section className="product-card">
 
     <img 
     src={thumbnail.replace(/\w\.jpg/gi, 'W.jpg')}
-    // src = {"http://http2.mlstatic.com/D_605126-MLM51559383638_092022-I.jpg"}
     alt="product" 
     className="card__image"
      />
@@ -25,7 +29,11 @@ function ProductCard({ data }) {
       <h2 className="card__title">{title}</h2>
     </div>
     
-    <button type="button" className="button__add-cart">
+    <button
+    type="button" 
+    className="button__add-cart"
+    onClick={handleAddCart}
+    >
       <BsFillCartPlusFill/>
     </button>
     </section>
